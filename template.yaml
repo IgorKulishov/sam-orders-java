@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-orders-java
+  Sample SAM Template for sam-orders-java
+
+Parameters:
+  #  Database_username:
+  #    Description: Production DB username
+  #    Type: AWS::SSM::Parameter::Value<String>
+  #    Default: DatabaseUsername
+  #  Database_password:
+  #    Description: Production DB password
+  #    Type: AWS::SSM::Parameter::Value<String>
+  #    Default: DatabasePassword
+  EnvType:
+    Description: Environment type
+    Default: local
+    Type: String
+    AllowedValues:
+      - prod
+      - test
+      - local
+      - localTest
+
+Mappings:
+  EnvSettings:
+    dbEndpoints:
+      prod: '{{resolve:ssm:dbEndpoints}}'
+      local: host.docker.internal
+    dbName:
+      prod: OrdersRDSDemo
+      local: postgres
+    userName:
+      prod: '{{resolve:ssm:dbUserName}}'
+      local: postgres
+    password:
+      prod: '{{resolve:ssm:dbUserPass}}'
+      local: postgres
+
+
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 512
+    Runtime: java11
+    Architectures:
+      - x86_64
+    Environment:
+      Variables:
+        RDS_PORT: 5432
+#        RDS_ENDPOINTS: host.docker.internal
+#        RDS_ENDPOINTS: !GetAtt OrdersRDSDemo.Endpoint.Address
+        RDS_ENDPOINTS: !FindInMap [EnvSettings, dbEndpoints, !Ref EnvType]
+        RDS_DB_NAME: !FindInMap [EnvSettings, dbName, !Ref EnvType]
+        RDS_USERNAME: !FindInMap [EnvSettings, userName, !Ref EnvType]
+        RDS_PASSWORD: !FindInMap [EnvSettings, password, !Ref EnvType]
+
+Resources:
+  OrdersRDSDemo:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 5
+      Engine: postgres
+      DBName: OrdersRDSDemo
+      DBInstanceClass: db.t3.micro
+      MasterUsername: !FindInMap [EnvSettings, userName, !Ref EnvType]
+      MasterUserPassword: !FindInMap [EnvSettings, password, !Ref EnvType]
+  CreateUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: EcommerceApi
+      Handler: ecommerce.component.CreateUser::handleRequest
+      Policies:
+        - AmazonRDSFullAccess
+      MemorySize: 512
+      Events:
+        CreateUser:
+          Type: Api
+          Properties:
+            Path: /user
+            Method: post
+  ReadUser:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: EcommerceApi
+      Handler: ecommerce.component.ReadUser::handleRequest
+      Policies:
+        - AmazonRDSFullAccess
+      MemorySize: 512
+      Events:
+        CreateUser:
+          Type: Api
+          Properties:
+            Path: /user/{id}
+            Method: get

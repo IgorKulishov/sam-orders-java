@@ -1,0 +1,7 @@
+ecommerce/component/ReadUser.class
+ecommerce/dao/User.class
+db/migration/FlywayMigration.class
+ecommerce/component/CreateUser.class
+jdbc/old/not/used/AppJdbcConnOld.class
+ecommerce/connection/HibernateConnectionPool.class
+ecommerce/dto/UserDto.class
