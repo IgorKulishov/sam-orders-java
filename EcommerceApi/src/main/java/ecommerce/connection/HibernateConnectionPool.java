@@ -25,9 +25,7 @@ public class HibernateConnectionPool {
         settings.put("hibernate.current_session_context_class", "thread");
         settings.put("hibernate.show_sql", "true");
         settings.put("hibernate.format_sql", "true");
-        System.out.println(getJDBCUrl());
-        System.out.println(System.getenv("RDS_USERNAME"));
-        System.out.println(System.getenv("RDS_PASSWORD"));
+
         ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(settings).build();
         MetadataSources metadataSources = new MetadataSources(serviceRegistry);
 //        TODO: create class and add .addAnnotatedClass(Item.class)
