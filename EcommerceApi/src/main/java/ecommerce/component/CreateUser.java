@@ -9,7 +9,7 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import ecommerce.connection.HibernateConnectionPool;
+import ecommerce.connection.HibernateConnectionPoolImpl;
 import ecommerce.dao.User;
 import ecommerce.dto.UserDto;
 import org.hibernate.Session;
@@ -18,8 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CreateUser implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-        LambdaLogger logger = context.getLogger();
+    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent event, final Context context) {
+//        LambdaLogger logger = context.getLogger();
         // Prepare response
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -29,11 +29,13 @@ public class CreateUser implements RequestHandler<APIGatewayProxyRequestEvent, A
                 .withHeaders(headers);
 
         // Persist block
-        try (SessionFactory sessionFactory = new HibernateConnectionPool().createSessionFactory()) {
+        try {
+            HibernateConnectionPoolImpl connectionPool = new HibernateConnectionPoolImpl();
+            SessionFactory sessionFactory = connectionPool.createSessionFactory();
             Session session = sessionFactory.getCurrentSession();
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                UserDto userDto = objectMapper.readValue(input.getBody(), UserDto.class);
+                UserDto userDto = objectMapper.readValue(event.getBody(), UserDto.class);
 
                 session.beginTransaction();
                 User userDao = new User();
@@ -55,8 +57,10 @@ public class CreateUser implements RequestHandler<APIGatewayProxyRequestEvent, A
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+        return null;
     }
 
     private String prepareResponseObject(UserDto userDto) {

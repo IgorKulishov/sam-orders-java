@@ -8,6 +8,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ecommerce.connection.HibernateConnectionPool;
+import ecommerce.connection.HibernateConnectionPoolImpl;
 import ecommerce.dao.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,7 +31,7 @@ public class ReadUser implements RequestHandler<APIGatewayProxyRequestEvent, API
                 .withHeaders(headers);
 
         // Persist block
-        try (SessionFactory sessionFactory = new HibernateConnectionPool().createSessionFactory()) {
+        try (SessionFactory sessionFactory = new HibernateConnectionPoolImpl().createSessionFactory()) {
             Session session = sessionFactory.getCurrentSession();
 
             session.beginTransaction();
