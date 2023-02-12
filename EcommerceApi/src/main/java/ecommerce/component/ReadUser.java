@@ -36,8 +36,6 @@ public class ReadUser implements RequestHandler<APIGatewayProxyRequestEvent, API
 
             session.beginTransaction();
 
-            String id = pathParameters.get("id");
-
             User user = session.get(User.class, UUID.fromString(pathParameters.get("id")));
 
             String responseJsonStrBody = prepareResponseObject(user);

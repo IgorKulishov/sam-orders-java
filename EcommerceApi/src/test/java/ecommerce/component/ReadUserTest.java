@@ -1,5 +1,6 @@
 package ecommerce.component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import ecommerce.dto.UserDto;
 import ecommerce.dao.User;
 
@@ -50,7 +51,7 @@ public class ReadUserTest {
     Mockito.when(hibernateConnectionPoolMock.createSessionFactory()).thenReturn(sessionFactoryMock);
     Mockito.when(sessionFactoryMock.getCurrentSession()).thenReturn(sessionMock);
 //    doNothing().when(sessionMock).beginTransaction();
-    Mockito.when(sessionMock.get(User.class, UUID.class)).thenReturn(userDao);
+    Mockito.when(sessionMock.get(eq(User.class), any(UUID.class))).thenReturn(userDao);
     Mockito.when(sessionMock.getTransaction()).thenReturn(transaction);
     doNothing().when(transaction).commit();
     /* PowerMock */
@@ -67,7 +68,7 @@ public class ReadUserTest {
   }
 
   @Test
-  public void successfulResponse() {
+  public void successfulResponse() throws JsonProcessingException {
     /* call method */
     ReadUser readUser = new ReadUser();
     APIGatewayProxyResponseEvent response = readUser.handleRequest(event, null);
@@ -79,7 +80,7 @@ public class ReadUserTest {
     String content = response.getBody();
     assertEquals("application/json", response.getHeaders().get("Content-Type"));
     assertNotNull(content);
-//    UserDto user = objectMapper.readValue(content, UserDto.class);
-//    assertEquals(user.getFirstName(), "Bruce");
+    UserDto user = objectMapper.readValue(content, UserDto.class);
+    assertEquals(user.getFirstName(), "Bruce");
   }
 }
