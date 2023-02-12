@@ -21,7 +21,7 @@ public class ReadUser implements RequestHandler<APIGatewayProxyRequestEvent, API
 
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
         Map<String, String> pathParameters = input.getPathParameters();
-        LambdaLogger logger = context.getLogger();
+//        LambdaLogger logger = context.getLogger();
         // Prepare response
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -35,6 +35,8 @@ public class ReadUser implements RequestHandler<APIGatewayProxyRequestEvent, API
             Session session = sessionFactory.getCurrentSession();
 
             session.beginTransaction();
+
+            String id = pathParameters.get("id");
 
             User user = session.get(User.class, UUID.fromString(pathParameters.get("id")));
 

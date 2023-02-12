@@ -2,10 +2,10 @@
 <testng-results ignored="0" total="0" passed="0" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2023-02-12T03:43:10Z" name="ecommerce.component.CreateUserTest" finished-at="2023-02-12T03:43:10Z" duration-ms="2">
+  <suite started-at="2023-02-12T05:54:06Z" name="Command line suite" finished-at="2023-02-12T05:54:06Z" duration-ms="1">
     <groups>
     </groups>
-    <test started-at="2023-02-12T03:43:10Z" name="Command line test" finished-at="2023-02-12T03:43:10Z" duration-ms="2">
+    <test started-at="2023-02-12T05:54:06Z" name="Command line test" finished-at="2023-02-12T05:54:06Z" duration-ms="1">
     </test> <!-- Command line test -->
-  </suite> <!-- ecommerce.component.CreateUserTest -->
+  </suite> <!-- Command line suite -->
 </testng-results>

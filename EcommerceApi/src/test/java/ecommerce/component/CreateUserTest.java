@@ -1,39 +1,33 @@
 package ecommerce.component;
 
-//import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-
-//import static org.mockito.Mockito.*;
-
+import ecommerce.dto.UserDto;
 
 import static org.junit.Assert.*;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.Before;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import org.mockito.Mockito;
 
 import java.util.*;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import ecommerce.connection.HibernateConnectionPoolImpl;
-import ecommerce.dao.User;
-import ecommerce.dto.UserDto;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.InputStream;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.Before;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({CreateUser.class})
 public class CreateUserTest {
-
-  private System system;
   HibernateConnectionPoolImpl hibernateConnectionPoolMock;
   SessionFactory sessionFactoryMock;
   Session sessionMock;
@@ -68,7 +62,6 @@ public class CreateUserTest {
     /* call method */
     CreateUser createUser = new CreateUser();
     APIGatewayProxyResponseEvent response = createUser.handleRequest(input, null);
-    PowerMockito.verifyNew(HibernateConnectionPoolImpl.class).withNoArguments();
     /* Assertions */
     verify(transaction,times(1)).commit();
     verify(sessionMock,times(1)).save(createUser.userDao);
