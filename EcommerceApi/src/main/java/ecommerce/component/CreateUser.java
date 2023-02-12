@@ -17,6 +17,7 @@ import org.hibernate.SessionFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CreateUser implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+    public User userDao = new User();
 
     public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent event, final Context context) {
 //        LambdaLogger logger = context.getLogger();
@@ -38,7 +39,6 @@ public class CreateUser implements RequestHandler<APIGatewayProxyRequestEvent, A
                 UserDto userDto = objectMapper.readValue(event.getBody(), UserDto.class);
 
                 session.beginTransaction();
-                User userDao = new User();
                 userDao.setFirstName(userDto.getFirstName());
                 userDao.setLastName(userDto.getLastName());
                 userDao.setUserName(userDto.getUserName());

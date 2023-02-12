@@ -114,11 +114,11 @@
   </dependencies>
   <properties>
     <maven.compiler.target>11</maven.compiler.target>
-    <junit4.version>4.12</junit4.version>
     <testng.version>6.14.3</testng.version>
     <java.version>10</java.version>
     <maven.compiler.source>11</maven.compiler.source>
     <powermock.version>2.0.0-beta.5</powermock.version>
+    <junit.version>4.12</junit.version>
     <mockito-core.version>2.19.0</mockito-core.version>
   </properties>
 </project>
